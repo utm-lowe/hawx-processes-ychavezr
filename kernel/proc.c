@@ -282,7 +282,7 @@ int proc_load_elf(struct proc *p, void *bin)
     }
   }
 
-  // set up user stack: one guard page + one real stack page
+
   sz = PGROUNDUP(sz);
   sz = proc_resize(pagetable, sz, sz + 2 * PGSIZE);
   if (sz == 0)
@@ -292,11 +292,11 @@ int proc_load_elf(struct proc *p, void *bin)
   sp = sz;
   sp -= sp % 16;
 
-  // destroy old page table
+
   oldpagetable = p->pagetable;
   oldsz = p->sz;
 
-  // commit to new image
+
   p->pagetable = pagetable;
   p->sz = sz;
   p->trapframe->epc = elf.entry;
@@ -305,7 +305,7 @@ int proc_load_elf(struct proc *p, void *bin)
   if (oldpagetable)
     proc_free_pagetable(oldpagetable, oldsz);
 
-  // mark runnable
+ 
   p->state = RUNNABLE;
 
   return 0;
